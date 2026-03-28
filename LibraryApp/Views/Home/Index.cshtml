@@ -1,0 +1,127 @@
+﻿@model List<LibraryApp.Models.Book>
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Page Title -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-1">
+            <i class="bi bi-speedometer2 text-primary me-2"></i>Dashboard
+        </h4>
+        <p class="text-muted mb-0">Library ka overview</p>
+    </div>
+    <a asp-controller="Book" asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>Add Book
+    </a>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-5">
+    <div class="col-6 col-md-3">
+        <div class="card stat-card p-3 border-start border-primary border-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted small mb-1">Total Books</p>
+                    <h3 class="fw-bold mb-0">@ViewBag.TotalBooks</h3>
+                </div>
+                <i class="bi bi-book-fill text-primary" style="font-size:2rem"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card stat-card p-3 border-start border-success border-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted small mb-1">Available</p>
+                    <h3 class="fw-bold mb-0 text-success">@ViewBag.AvailableBooks</h3>
+                </div>
+                <i class="bi bi-check-circle-fill text-success" style="font-size:2rem"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card stat-card p-3 border-start border-warning border-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted small mb-1">Categories</p>
+                    <h3 class="fw-bold mb-0 text-warning">@ViewBag.TotalCategories</h3>
+                </div>
+                <i class="bi bi-tags-fill text-warning" style="font-size:2rem"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card stat-card p-3 border-start border-info border-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted small mb-1">Total Value</p>
+                    <h3 class="fw-bold mb-0 text-info">₹@ViewBag.TotalValue</h3>
+                </div>
+                <i class="bi bi-currency-rupee text-info" style="font-size:2rem"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Books -->
+<div class="card">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h6 class="fw-bold mb-0">
+            <i class="bi bi-clock-history text-primary me-2"></i>Recently Added Books
+        </h6>
+        <a asp-controller="Book" asp-action="Index"
+           class="btn btn-sm btn-outline-primary">View All</a>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-3">Book</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr>
+                        <td class="ps-3 fw-semibold">@book.Title</td>
+                        <td class="text-muted">@book.Author</td>
+                        <td>
+                            <span class="badge bg-primary-subtle text-primary">
+                                @book.Category?.Name
+                            </span>
+                        </td>
+                        <td>₹@book.Price</td>
+                        <td>
+                            @if (book.IsAvailable)
+                            {
+                                <span class="badge bg-success-subtle text-success">
+                                    Available
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger-subtle text-danger">
+                                    Issued
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-controller="Book" asp-action="Details"
+                               asp-route-id="@book.Id"
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
